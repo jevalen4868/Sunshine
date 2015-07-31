@@ -322,7 +322,7 @@ public class ForecastFragment extends Fragment {
             // First, format the temps based on user pref.
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-            String unitUserPref = sharedPreferences.getString(getString(R.string.unit_key),getString(R.string.default_unit));
+            String unitUserPref = sharedPreferences.getString(getString(R.string.pref_units_key),getString(R.string.default_unit));
             // If the pref is not the default unit, metric, convert it.
             if( ! unitUserPref.contentEquals(getString(R.string.default_unit))) {
                 high = high * (1.8) + 32;

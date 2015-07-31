@@ -1,13 +1,10 @@
 package com.fallenman.jeremyvalenzuela.sunshine.app;
 
 import android.os.Bundle;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.text.InputType;
-import android.widget.EditText;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -30,7 +27,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.location_key)));
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.unit_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_units_key)));
 
     }
 

@@ -11,8 +11,10 @@
     <string name="location_default">94043</string>
     <string name="default_unit">metric</string>
     <string name="unit_title">Units</string>
-    <string name="unit_key" translatable="false">units</string>
     <string name="action_open_map">Show location on map</string>
+    <string name="pref_units_key" translatable="false">units</string>
+    <string name="pref_units_imperial">Imperial</string>
+    <string name="pref_units_metric">Metric</string>
     <string-array name="unit_keys">
         <item>Metric</item>
         <item>Imperial</item>
