@@ -5,13 +5,13 @@
         android:inputType="number"
         android:key="@string/location_key"
         android:title="@string/location_title"
-        android:defaultValue="@string/location_default"
+        android:defaultValue="@string/pref_location_default"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:maxLines="1"
         android:id="@+id/location_preference"/>
     <ListPreference
-        android:key="@string/pref_units_key"
+        android:key="@string/pref_location_key"
         android:title="@string/unit_title"
         android:defaultValue="@string/default_unit"
         android:entryValues="@array/unit_values"

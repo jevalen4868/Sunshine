@@ -12,6 +12,8 @@
         <provider
             android:authorities="com.fallenman.jeremyvalenzuela.sunshine.app"
             android:name=".data.WeatherProvider"
+            android:enabled="true"
+            android:exported="true"
             />
         <activity
             android:name=".MainActivity"
