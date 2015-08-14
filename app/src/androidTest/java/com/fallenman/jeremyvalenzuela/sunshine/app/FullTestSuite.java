@@ -1,8 +1,9 @@
 package com.fallenman.jeremyvalenzuela.sunshine.app;
+
 import android.test.suitebuilder.TestSuiteBuilder;
 
-import junit.framework.TestSuite;
 import junit.framework.Test;
+import junit.framework.TestSuite;
 
     /*
  * Copyright (C) 2014 The Android Open Source Project
@@ -19,16 +20,17 @@ import junit.framework.Test;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * Created by jeremyvalenzuela on 7/17/15.
  */
 public class FullTestSuite extends TestSuite {
+    public FullTestSuite() {
+        super();
+    }
+
     public static Test suite() {
         return new TestSuiteBuilder(FullTestSuite.class)
                 .includeAllPackagesUnderHere().build();
-    }
-
-    public FullTestSuite() {
-        super();
     }
 }

@@ -48,12 +48,11 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
     private final String LOG_TAG = FetchWeatherTask.class.getSimpleName();
 
     private final Context mContext;
+    private boolean DEBUG = true;
 
     public FetchWeatherTask(Context context) {
         mContext = context;
     }
-
-    private boolean DEBUG = true;
 
     /**
      * Helper method to handle insertion of a new location in the weather database.

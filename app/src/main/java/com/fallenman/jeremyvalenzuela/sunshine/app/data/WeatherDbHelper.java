@@ -21,15 +21,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.fallenman.jeremyvalenzuela.sunshine.app.data.WeatherContract.LocationEntry;
 import com.fallenman.jeremyvalenzuela.sunshine.app.data.WeatherContract.WeatherEntry;
+
 /**
  * Manages a local database for weather data.
  */
 public class WeatherDbHelper extends SQLiteOpenHelper {
 
+    static final String DATABASE_NAME = "weather.db";
     // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 2;
-
-    static final String DATABASE_NAME = "weather.db";
 
     public WeatherDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

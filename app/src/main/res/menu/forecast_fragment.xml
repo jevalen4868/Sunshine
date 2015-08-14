@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/action_refresh"
-        android:title="@string/action_refresh"
+    <item
+        android:id="@+id/action_refresh"
         android:orderInCategory="0"
+        android:title="@string/action_refresh"
         app:showAsAction="never" />
-    <item android:id="@+id/action_open_map"
-        android:title="@string/action_open_map"
+    <item
+        android:id="@+id/action_open_map"
         android:orderInCategory="1"
-        app:showAsAction="ifRoom"
-        />
+        android:title="@string/action_open_map"
+        app:showAsAction="ifRoom" />
 </menu>

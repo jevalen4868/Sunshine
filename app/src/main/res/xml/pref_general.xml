@@ -2,20 +2,19 @@
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
     <EditTextPreference
+        android:id="@+id/location_preference"
+        android:defaultValue="@string/pref_location_default"
         android:inputType="number"
         android:key="@string/location_key"
-        android:title="@string/location_title"
-        android:defaultValue="@string/pref_location_default"
+        android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:maxLines="1"
-        android:id="@+id/location_preference"/>
+        android:title="@string/location_title" />
     <ListPreference
-        android:key="@string/pref_location_key"
-        android:title="@string/unit_title"
         android:defaultValue="@string/default_unit"
-        android:entryValues="@array/unit_values"
         android:entries="@array/unit_keys"
+        android:entryValues="@array/unit_values"
+        android:key="@string/pref_location_key"
         android:summary="%s"
-        ></ListPreference>
+        android:title="@string/unit_title"></ListPreference>
 </PreferenceScreen>

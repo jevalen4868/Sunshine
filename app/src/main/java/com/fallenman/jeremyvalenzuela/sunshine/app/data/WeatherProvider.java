@@ -30,16 +30,28 @@ import android.net.Uri;
 
 public class WeatherProvider extends ContentProvider {
 
-    // The URI Matcher used by this content provider.
-    private static final UriMatcher sUriMatcher = buildUriMatcher();
-    private WeatherDbHelper mOpenHelper;
-
     static final int WEATHER = 100;
     static final int WEATHER_WITH_LOCATION = 101;
     static final int WEATHER_WITH_LOCATION_AND_DATE = 102;
     static final int LOCATION = 300;
-
+    // The URI Matcher used by this content provider.
+    private static final UriMatcher sUriMatcher = buildUriMatcher();
+    private static final String LOG_TAG = "WeatherProvider";
     private static final SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder;
+    //location.location_setting = ?
+    private static final String sLocationSettingSelection =
+            WeatherContract.LocationEntry.TABLE_NAME +
+                    "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? ";
+    //location.location_setting = ? AND date >= ?
+    private static final String sLocationSettingWithStartDateSelection =
+            WeatherContract.LocationEntry.TABLE_NAME +
+                    "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
+                    WeatherContract.WeatherEntry.COLUMN_DATE + " >= ? ";
+    //location.location_setting = ? AND date = ?
+    private static final String sLocationSettingAndDaySelection =
+            WeatherContract.LocationEntry.TABLE_NAME +
+                    "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
+                    WeatherContract.WeatherEntry.COLUMN_DATE + " = ? ";
 
     static {
         sWeatherByLocationSettingQueryBuilder = new SQLiteQueryBuilder();
@@ -55,22 +67,27 @@ public class WeatherProvider extends ContentProvider {
                         "." + WeatherContract.LocationEntry._ID);
     }
 
-    //location.location_setting = ?
-    private static final String sLocationSettingSelection =
-            WeatherContract.LocationEntry.TABLE_NAME +
-                    "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? ";
+    private WeatherDbHelper mOpenHelper;
 
-    //location.location_setting = ? AND date >= ?
-    private static final String sLocationSettingWithStartDateSelection =
-            WeatherContract.LocationEntry.TABLE_NAME +
-                    "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
-                    WeatherContract.WeatherEntry.COLUMN_DATE + " >= ? ";
-
-    //location.location_setting = ? AND date = ?
-    private static final String sLocationSettingAndDaySelection =
-            WeatherContract.LocationEntry.TABLE_NAME +
-                    "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
-                    WeatherContract.WeatherEntry.COLUMN_DATE + " = ? ";
+    /*
+        Students: Here is where you need to create the UriMatcher. This UriMatcher will
+        match each URI to the WEATHER, WEATHER_WITH_LOCATION, WEATHER_WITH_LOCATION_AND_DATE,
+        and LOCATION integer constants defined above.  You can test this by uncommenting the
+        testUriMatcher test within TestUriMatcher.
+     */
+    static UriMatcher buildUriMatcher() {
+        // 1) The code passed into the constructor represents the code to return for the root
+        // URI.  It's common to use NO_MATCH as the code for this case. Add the constructor below.
+        UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+        // 2) Use the addURI function to match each of the types.  Use the constants from
+        // WeatherContract to help define the types to the UriMatcher.
+        uriMatcher.addURI(WeatherContract.CONTENT_AUTHORITY, WeatherContract.PATH_WEATHER, WEATHER);
+        uriMatcher.addURI(WeatherContract.CONTENT_AUTHORITY, WeatherContract.PATH_WEATHER + "/*", WEATHER_WITH_LOCATION);
+        uriMatcher.addURI(WeatherContract.CONTENT_AUTHORITY, WeatherContract.PATH_WEATHER + "/*/#", WEATHER_WITH_LOCATION_AND_DATE);
+        uriMatcher.addURI(WeatherContract.CONTENT_AUTHORITY, WeatherContract.PATH_LOCATION, LOCATION);
+        // 3) Return the new matcher!
+        return uriMatcher;
+    }
 
     private Cursor getWeatherByLocationSetting(Uri uri, String[] projection, String sortOrder) {
         String locationSetting = WeatherContract.WeatherEntry.getLocationSettingFromUri(uri);
@@ -110,26 +127,6 @@ public class WeatherProvider extends ContentProvider {
                 null,
                 sortOrder
         );
-    }
-
-    /*
-        Students: Here is where you need to create the UriMatcher. This UriMatcher will
-        match each URI to the WEATHER, WEATHER_WITH_LOCATION, WEATHER_WITH_LOCATION_AND_DATE,
-        and LOCATION integer constants defined above.  You can test this by uncommenting the
-        testUriMatcher test within TestUriMatcher.
-     */
-    static UriMatcher buildUriMatcher() {
-        // 1) The code passed into the constructor represents the code to return for the root
-        // URI.  It's common to use NO_MATCH as the code for this case. Add the constructor below.
-        UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        // 2) Use the addURI function to match each of the types.  Use the constants from
-        // WeatherContract to help define the types to the UriMatcher.
-        uriMatcher.addURI(WeatherContract.CONTENT_AUTHORITY, WeatherContract.PATH_WEATHER, WEATHER);
-        uriMatcher.addURI(WeatherContract.CONTENT_AUTHORITY, WeatherContract.PATH_WEATHER + "/*", WEATHER_WITH_LOCATION);
-        uriMatcher.addURI(WeatherContract.CONTENT_AUTHORITY, WeatherContract.PATH_WEATHER + "/*/#", WEATHER_WITH_LOCATION_AND_DATE);
-        uriMatcher.addURI(WeatherContract.CONTENT_AUTHORITY, WeatherContract.PATH_LOCATION, LOCATION);
-        // 3) Return the new matcher!
-        return uriMatcher;
     }
 
     /*
@@ -262,7 +259,9 @@ public class WeatherProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         int numRowsDeleted = 0;
         // make sure delete all rows returns number of rows deleted.
-        if(null == selection ) { selection = "1"; }
+        if (null == selection) {
+            selection = "1";
+        }
         switch (match) {
             case WEATHER: {
                 numRowsDeleted = db.delete(WeatherContract.WeatherEntry.TABLE_NAME, selection, selectionArgs);
@@ -280,7 +279,7 @@ public class WeatherProvider extends ContentProvider {
         // is null.
         // Oh, and you should notify the listeners here.
         db.close();
-        if(numRowsDeleted != 0) {
+        if (numRowsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         // Student: return the actual rows deleted
@@ -296,7 +295,7 @@ public class WeatherProvider extends ContentProvider {
     }
 
     @Override
-    public int update( Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         // Student: This is a lot like the delete function.  We return the number of rows impacted
         // by the update.
         // Student: Start by getting a writable database
@@ -324,7 +323,7 @@ public class WeatherProvider extends ContentProvider {
         // is null.
         // Oh, and you should notify the listeners here.
         db.close();
-        if(numRowsUpdated != 0) {
+        if (numRowsUpdated != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
         // Student: return the actual rows deleted

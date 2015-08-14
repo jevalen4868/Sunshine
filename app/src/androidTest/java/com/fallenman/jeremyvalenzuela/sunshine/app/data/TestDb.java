@@ -18,13 +18,12 @@ package com.fallenman.jeremyvalenzuela.sunshine.app.data;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.location.Location;
 import android.test.AndroidTestCase;
-
-import java.util.HashSet;
 
 import com.fallenman.jeremyvalenzuela.sunshine.app.data.WeatherContract.LocationEntry;
 import com.fallenman.jeremyvalenzuela.sunshine.app.data.WeatherContract.WeatherEntry;
+
+import java.util.HashSet;
 
 public class TestDb extends AndroidTestCase {
 
@@ -75,7 +74,7 @@ public class TestDb extends AndroidTestCase {
         // verify that the tables have been created
         do {
             tableNameHashSet.remove(c.getString(0));
-        } while( c.moveToNext() );
+        } while (c.moveToNext());
 
         // if this fails, it means that your database doesn't contain both the location entry
         // and weather entry tables
@@ -101,7 +100,7 @@ public class TestDb extends AndroidTestCase {
         do {
             String columnName = c.getString(columnNameIndex);
             locationColumnHashSet.remove(columnName);
-        } while(c.moveToNext());
+        } while (c.moveToNext());
 
         // if this fails, it means that your database doesn't contain all of the required location
         // entry columns
