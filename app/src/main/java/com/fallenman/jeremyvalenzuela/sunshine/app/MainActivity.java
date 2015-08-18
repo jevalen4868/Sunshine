@@ -9,11 +9,12 @@ import android.view.MenuItem;
 
 public class MainActivity extends ActionBarActivity {
 
-    private static final String FORECAST_FRAGMENT_TAG = "ForecastFragmentTag";
+    private static final String DETAIL_FRAGMENT_TAG = "DFTAG";
     /**
      * Current known location.
      */
     private String location;
+    private boolean twoPane = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,14 +22,27 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         // Set location.
         location = Utility.getPreferredLocation(this);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().add(
-                    R.id.container, new ForecastFragment(), FORECAST_FRAGMENT_TAG
-            ).commit();
-        }
+        // Enable icon in action bar.
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setLogo(R.mipmap.ic_launcher);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
+        // determine if we are in two page view.
+        if (findViewById(R.id.weather_detail_container) != null) {
+            // The detail container view will be present only in the large-screen layouts
+            // (res/layout-sw600dp). If this view is present, then the activity should be
+            // in two-pane mode.
+            twoPane = true;
+            // In two-pane mode, show the detail view in this activity by
+            // adding or replacing the detail fragment using a
+            // fragment transaction.
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.weather_detail_container, new DetailActivityFragment(), DETAIL_FRAGMENT_TAG)
+                        .commit();
+            }
+        } else {
+            twoPane = false;
+        }
     }
 
     @Override
@@ -58,7 +72,12 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ForecastFragment ff = (ForecastFragment) getSupportFragmentManager().findFragmentByTag(FORECAST_FRAGMENT_TAG);
-        ff.onLocationChanged();
+        String location = Utility.getPreferredLocation(this);
+        if ( location != null && !location.equals(this.location)) {
+            ForecastFragment ff = (ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
+            if (null != ff) {
+                ff.onLocationChanged();
+            }
+        }
     }
 }

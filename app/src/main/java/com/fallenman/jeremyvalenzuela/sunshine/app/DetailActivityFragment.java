@@ -128,7 +128,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         // Grab calling intent, so we can take it's data! Muahahaha!
         Intent intent = getActivity().getIntent();
         // check if intent has the data we are expecting.
-        if (intent == null) {
+        if (intent == null || intent.getData() == null) {
             return null;
         }
         return new CursorLoader(
