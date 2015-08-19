@@ -1,13 +1,14 @@
 package com.fallenman.jeremyvalenzuela.sunshine.app;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements ForecastFragment.Callback {
 
     private static final String DETAIL_FRAGMENT_TAG = "DFTAG";
     /**
@@ -45,6 +46,8 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -73,11 +76,37 @@ public class MainActivity extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
         String location = Utility.getPreferredLocation(this);
-        if ( location != null && !location.equals(this.location)) {
+        if ( location != null ) { //&& !location.equals(this.location)) {
             ForecastFragment ff = (ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
             if (null != ff) {
                 ff.onLocationChanged();
             }
+            DetailActivityFragment df = (DetailActivityFragment)getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
+            if ( null != df ) {
+                df.onLocationChanged(location);
+            }
+            this.location = location;
+        }
+    }
+
+    @Override
+    public void onItemSelected(Uri contentUri) {
+        if(this.twoPane) {
+            // Replace the detail view in two pane mode, using a transaction.
+            Bundle args = new Bundle();
+            args.putParcelable(DetailActivityFragment.DETAIL_URI, contentUri);
+
+            DetailActivityFragment daf = new DetailActivityFragment();
+            daf.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.weather_detail_container, daf, DETAIL_FRAGMENT_TAG)
+                    .commit();
+        }
+        else {
+            Intent intent = new Intent(this, DetailActivity.class)
+                    .setData(contentUri);
+            startActivity(intent);
         }
     }
 }

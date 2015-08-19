@@ -3,6 +3,7 @@ package com.fallenman.jeremyvalenzuela.sunshine.app;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -37,6 +38,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     static final int COL_PRESSURE = 7;
     static final int COL_WIND_SPEED = 8;
     static final int COL_DEGREES = 9;
+
     private static final int DETAIL_LOADER = 0;
     private static final String[] FORECAST_COLUMNS = {
             // In this case the id needs to be fully qualified with a table name, since
@@ -56,9 +58,14 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
             WeatherContract.WeatherEntry.COLUMN_WIND_SPEED,
             WeatherContract.WeatherEntry.COLUMN_DEGREES
     };
+    public static final String DETAIL_URI = "URI";
+
     private final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
     private String forecast;
+    private Uri uri;
     private ShareActionProvider shareActionProvider;
+
+    // all views associated to this fragment.
     private ImageView iconView;
     private TextView friendlyDateView;
     private TextView dateView;
@@ -77,6 +84,11 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Bundle args = getArguments();
+        if(args != null) {
+            this.uri = args.getParcelable(DetailActivityFragment.DETAIL_URI);
+        }
+
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         // Voila!!!
         this.iconView = (ImageView) rootView.findViewById(R.id.weather_icon);
@@ -110,6 +122,17 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         getLoaderManager().initLoader(DETAIL_LOADER, savedInstanceState, this);
     }
 
+    public void onLocationChanged(String location) {
+        // replace the uri, since the location has changed
+        Uri uri = this.uri;
+        if (null != uri) {
+            long date = WeatherContract.WeatherEntry.getDateFromUri(uri);
+            Uri updatedUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(location, date);
+            this.uri = updatedUri;
+            getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
+        }
+    }
+
     private Intent createShareIntent() {
         // Nab the forecast data from the activity.
         TextView forecastView = (TextView) getActivity().findViewById(R.id.forecast_textview);
@@ -125,20 +148,17 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        // Grab calling intent, so we can take it's data! Muahahaha!
-        Intent intent = getActivity().getIntent();
-        // check if intent has the data we are expecting.
-        if (intent == null || intent.getData() == null) {
-            return null;
+        if( null != this.uri) {
+            return new CursorLoader(
+                    getActivity(),
+                    this.uri,
+                    FORECAST_COLUMNS,
+                    null,
+                    null,
+                    null
+            );
         }
-        return new CursorLoader(
-                getActivity(),
-                intent.getData(),
-                FORECAST_COLUMNS,
-                null,
-                null,
-                null
-        );
+        return null;
     }
 
     @Override
