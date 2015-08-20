@@ -18,8 +18,14 @@ public class ForecastAdapter extends CursorAdapter {
     private final int VIEW_TYPE_TODAY = 0;
     private final int VIEW_TYPE_FUTURE_DAY = 1;
 
+    private boolean mUseTodayLayout;
+
     public ForecastAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
+    }
+
+    public void setUseTodayLayout(boolean useTodayLayout) {
+        mUseTodayLayout = useTodayLayout;
     }
 
     @Override
@@ -29,7 +35,7 @@ public class ForecastAdapter extends CursorAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        return (position == 0) ? VIEW_TYPE_TODAY : VIEW_TYPE_FUTURE_DAY;
+        return (position == 0 && mUseTodayLayout) ? VIEW_TYPE_TODAY : VIEW_TYPE_FUTURE_DAY;
     }
 
     /*
@@ -62,10 +68,10 @@ public class ForecastAdapter extends CursorAdapter {
         // Retrieve weather icons based on layoutId and conditionId.
         int conditionId = cursor.getInt(ForecastFragment.COL_WEATHER_CONDITION_ID);
         int layoutId = getItemViewType(cursor.getPosition());
-        if(layoutId == VIEW_TYPE_TODAY) {
+        if (layoutId == VIEW_TYPE_TODAY) {
             viewHolder.iconView.setImageResource(Utility.getArtResourceForWeatherCondition(conditionId));
         }
-        if(layoutId == VIEW_TYPE_FUTURE_DAY) {
+        if (layoutId == VIEW_TYPE_FUTURE_DAY) {
             viewHolder.iconView.setImageResource(Utility.getIconResourceForWeatherCondition(conditionId));
         }
         // Read date from cursor

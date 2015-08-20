@@ -44,9 +44,9 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
         } else {
             twoPane = false;
         }
+        ForecastFragment ff = ((ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast));
+        ff.setUseTodayLayout(!twoPane);
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,13 +76,13 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
     protected void onResume() {
         super.onResume();
         String location = Utility.getPreferredLocation(this);
-        if ( location != null ) { //&& !location.equals(this.location)) {
+        if (location != null) { //&& !location.equals(this.location)) {
             ForecastFragment ff = (ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
             if (null != ff) {
                 ff.onLocationChanged();
             }
-            DetailActivityFragment df = (DetailActivityFragment)getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
-            if ( null != df ) {
+            DetailActivityFragment df = (DetailActivityFragment) getSupportFragmentManager().findFragmentByTag(DETAIL_FRAGMENT_TAG);
+            if (null != df) {
                 df.onLocationChanged(location);
             }
             this.location = location;
@@ -91,7 +91,7 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
 
     @Override
     public void onItemSelected(Uri contentUri) {
-        if(this.twoPane) {
+        if (this.twoPane) {
             // Replace the detail view in two pane mode, using a transaction.
             Bundle args = new Bundle();
             args.putParcelable(DetailActivityFragment.DETAIL_URI, contentUri);
@@ -102,8 +102,7 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.weather_detail_container, daf, DETAIL_FRAGMENT_TAG)
                     .commit();
-        }
-        else {
+        } else {
             Intent intent = new Intent(this, DetailActivity.class)
                     .setData(contentUri);
             startActivity(intent);

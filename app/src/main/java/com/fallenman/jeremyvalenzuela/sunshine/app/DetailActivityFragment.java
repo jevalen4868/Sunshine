@@ -26,6 +26,7 @@ import com.fallenman.jeremyvalenzuela.sunshine.app.data.WeatherContract;
  * A placeholder fragment containing a simple view.
  */
 public class DetailActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    public static final String DETAIL_URI = "URI";
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
     // must change.
     static final int COL_WEATHER_ID = 0;
@@ -38,7 +39,6 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     static final int COL_PRESSURE = 7;
     static final int COL_WIND_SPEED = 8;
     static final int COL_DEGREES = 9;
-
     private static final int DETAIL_LOADER = 0;
     private static final String[] FORECAST_COLUMNS = {
             // In this case the id needs to be fully qualified with a table name, since
@@ -58,8 +58,6 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
             WeatherContract.WeatherEntry.COLUMN_WIND_SPEED,
             WeatherContract.WeatherEntry.COLUMN_DEGREES
     };
-    public static final String DETAIL_URI = "URI";
-
     private final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
     private String forecast;
     private Uri uri;
@@ -85,7 +83,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Bundle args = getArguments();
-        if(args != null) {
+        if (args != null) {
             this.uri = args.getParcelable(DetailActivityFragment.DETAIL_URI);
         }
 
@@ -148,7 +146,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if( null != this.uri) {
+        if (null != this.uri) {
             return new CursorLoader(
                     getActivity(),
                     this.uri,
