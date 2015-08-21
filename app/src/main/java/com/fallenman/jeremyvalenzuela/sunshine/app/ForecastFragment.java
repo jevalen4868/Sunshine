@@ -183,7 +183,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     public void setUseTodayLayout(boolean useTodayLayout) {
         mUseTodayLayout = useTodayLayout;
-        if(mForecastAdapter!= null) {
+        if (mForecastAdapter != null) {
             mForecastAdapter.setUseTodayLayout(useTodayLayout);
         }
     }

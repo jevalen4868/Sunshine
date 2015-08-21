@@ -11,7 +11,7 @@
     <string name="pref_location_default">94043</string>
     <string name="default_unit">metric</string>
     <string name="unit_title">Units</string>
-    <string name="action_open_map">Show location on map</string>
+    <string name="action_open_map">Location</string>
     <string name="pref_location_key" translatable="false">units</string>
     <string name="pref_units_imperial">imperial</string>
     <string name="pref_units_metric">metric</string>
@@ -28,7 +28,7 @@
     <!-- Date label when displaying tomorrow's weather forecast [CHAR LIMIT=20] -->
     <string name="tomorrow">Tomorrow</string>
     <!-- Date format for displaying day of week and date (i.e. Mon Jun 1) [CHAR LIMIT=20] -->
-    <string name="format_full_friendly_date"><xliff:g id="day">%1$s</xliff:g>, <xliff:g id="date">%2$s</xliff:g></string>
+    <string name="format_full_friendly_date"><xliff:g id="month">%1$s</xliff:g>, <xliff:g id="day">%2$s</xliff:g></string>
 
     <!-- Strings for formatting weather-related data -->
     <!-- Temperature format [CHAR LIMIT=5] -->

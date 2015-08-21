@@ -2,14 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.fallenman.jeremyvalenzuela.sunshine.app.ForecastFragment"
-    >
+    tools:context="com.fallenman.jeremyvalenzuela.sunshine.app.ForecastFragment">
 
     <ListView
         android:id="@+id/listview_forecast"
+        style="@style/ForecastListStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="@style/ForecastListStyle"
-        />
+        android:divider="@null" />
 
 </FrameLayout>

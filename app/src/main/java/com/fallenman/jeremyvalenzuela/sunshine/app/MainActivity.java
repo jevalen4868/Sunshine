@@ -23,10 +23,6 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
         setContentView(R.layout.activity_main);
         // Set location.
         location = Utility.getPreferredLocation(this);
-        // Enable icon in action bar.
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setLogo(R.mipmap.ic_launcher);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
         // determine if we are in two page view.
         if (findViewById(R.id.weather_detail_container) != null) {
             // The detail container view will be present only in the large-screen layouts
@@ -43,8 +39,9 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
             }
         } else {
             twoPane = false;
+            getSupportActionBar().setElevation(0f);
         }
-        ForecastFragment ff = ((ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast));
+        ForecastFragment ff = ((ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast));
         ff.setUseTodayLayout(!twoPane);
     }
 

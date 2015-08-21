@@ -1,71 +1,89 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp"
-        tools:context="com.fallenman.jeremyvalenzuela.sunshine.app.DetailActivityFragment">
+        android:padding="16dp">
 
-        <LinearLayout xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:padding="16dp"
-            tools:context="com.fallenman.jeremyvalenzuela.sunshine.app.DetailActivityFragment">
+            android:minWidth="56dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/friendly_date_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:minWidth="120dp"
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/date_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textColor="@color/grey_700"
+                android:textSize="20sp" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:minHeight="?android:attr/listPreferredItemHeight"
+            android:layout_marginLeft="16dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/high_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:textSize="96sp" />
 
             <TextView
                 android:id="@+id/low_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:textColor="@color/grey_700"
+                android:textSize="48sp" />
 
             <TextView
                 android:id="@+id/humidity_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:textAppearanceLarge" />
 
             <TextView
                 android:id="@+id/wind_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:textAppearanceLarge" />
 
             <TextView
                 android:id="@+id/pressure_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:textAppearanceLarge" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:orientation="vertical">
@@ -78,7 +96,10 @@
             <TextView
                 android:id="@+id/forecast_textview"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="@color/grey_700" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
