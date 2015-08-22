@@ -21,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.fallenman.jeremyvalenzuela.sunshine.app.charting.PieChart;
 import com.fallenman.jeremyvalenzuela.sunshine.app.data.WeatherContract;
 
 /**
@@ -120,16 +119,6 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getLoaderManager().initLoader(DETAIL_LOADER, savedInstanceState, this);
-
-        Resources res = getResources();
-        final PieChart pie = (PieChart) getActivity().findViewById(R.id.Pie);
-        pie.addItem("Agamemnon", 2, res.getColor(R.color.seafoam));
-        pie.addItem("Bocephus", 3.5f, res.getColor(R.color.chartreuse));
-        pie.addItem("Calliope", 2.5f, res.getColor(R.color.emerald));
-        pie.addItem("Daedalus", 3, res.getColor(R.color.bluegrass));
-        pie.addItem("Euripides", 1, res.getColor(R.color.turquoise));
-        pie.addItem("Ganymede", 3, res.getColor(R.color.slate));
-        pie.invalidate();
     }
 
     public void onLocationChanged(String location) {

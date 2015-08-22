@@ -108,23 +108,5 @@
                 android:textAppearance="?android:textAppearanceLarge" />
 
         </LinearLayout>
-        <com.fallenman.jeremyvalenzuela.sunshine.app.charting.PieChart
-            android:id="@+id/Pie"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:layout_weight="100"
-            custom:showText="true"
-            custom:labelHeight="20dp"
-            custom:labelWidth="110dp"
-            custom:labelY="85dp"
-            custom:labelPosition="left"
-            custom:highlightStrength="1.12"
-            android:background="@android:color/white"
-            custom:pieRotation="0"
-            custom:labelColor="@android:color/black"
-            custom:autoCenterPointerInSlice="true"
-            custom:pointerRadius="4dp"
-            />
     </LinearLayout>
 </ScrollView>
