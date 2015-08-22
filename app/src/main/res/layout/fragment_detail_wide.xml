@@ -100,6 +100,26 @@
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="?android:textAppearanceLarge"
                 android:textColor="@color/grey_700" />
+
+            <com.fallenman.jeremyvalenzuela.sunshine.app.charting.PieChart
+                xmlns:custom="http://schemas.android.com/apk/res/com.fallenman.jeremyvalenzuela.sunshine.app"
+                android:id="@+id/Pie"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_weight="100"
+                custom:showText="true"
+                custom:labelHeight="20dp"
+                custom:labelWidth="110dp"
+                custom:labelY="85dp"
+                custom:labelPosition="left"
+                custom:highlightStrength="1.12"
+                android:background="@android:color/white"
+                custom:pieRotation="0"
+                custom:labelColor="@android:color/black"
+                custom:autoCenterPointerInSlice="true"
+                custom:pointerRadius="4dp"
+                />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

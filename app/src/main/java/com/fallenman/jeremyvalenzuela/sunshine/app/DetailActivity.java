@@ -1,16 +1,20 @@
 package com.fallenman.jeremyvalenzuela.sunshine.app;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.fallenman.jeremyvalenzuela.sunshine.app.charting.PieChart;
 
 public class DetailActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
         if (savedInstanceState == null) {
             // Create the detail fragment using a transaction.
             Bundle args = new Bundle();

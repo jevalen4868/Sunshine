@@ -1,4 +1,5 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -23,7 +24,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-condensed"
             android:textColor="@color/grey_700"
-            android:textSize="16sp" />/>
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,7 +45,6 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-light"
                     android:textSize="96sp" />
-                />
 
                 <TextView
                     android:id="@+id/low_textview"
@@ -53,7 +53,6 @@
                     android:layout_gravity="center_horizontal"
                     android:textColor="@color/grey_700"
                     android:textSize="48sp" />
-                />
 
             </LinearLayout>
 
@@ -76,6 +75,7 @@
                     android:textAppearance="?android:textAppearanceLarge"
                     android:textColor="@color/grey_700" />
             </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -108,5 +108,23 @@
                 android:textAppearance="?android:textAppearanceLarge" />
 
         </LinearLayout>
+        <com.fallenman.jeremyvalenzuela.sunshine.app.charting.PieChart
+            android:id="@+id/Pie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_weight="100"
+            custom:showText="true"
+            custom:labelHeight="20dp"
+            custom:labelWidth="110dp"
+            custom:labelY="85dp"
+            custom:labelPosition="left"
+            custom:highlightStrength="1.12"
+            android:background="@android:color/white"
+            custom:pieRotation="0"
+            custom:labelColor="@android:color/black"
+            custom:autoCenterPointerInSlice="true"
+            custom:pointerRadius="4dp"
+            />
     </LinearLayout>
 </ScrollView>
