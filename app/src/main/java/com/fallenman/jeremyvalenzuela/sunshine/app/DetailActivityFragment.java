@@ -2,8 +2,8 @@ package com.fallenman.jeremyvalenzuela.sunshine.app;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -74,6 +75,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     private TextView humidityView;
     private TextView windView;
     private TextView pressureView;
+    private WindSpeedArrow mWindSpeedArrow;
 
     public DetailActivityFragment() {
         // MUST DO THIS IF DONE IN FRAGMENT.
@@ -99,6 +101,8 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         this.humidityView = (TextView) rootView.findViewById(R.id.humidity_textview);
         this.windView = (TextView) rootView.findViewById(R.id.wind_textview);
         this.pressureView = (TextView) rootView.findViewById(R.id.pressure_textview);
+        this.mWindSpeedArrow = (WindSpeedArrow) rootView.findViewById(R.id.wind_speed_arrow);
+        this.mWindSpeedArrow.invalidate();
         return rootView;
     }
 
@@ -200,6 +204,17 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         // Pressure.
         String pressure = activity.getString(R.string.format_pressure, cursor.getFloat(COL_PRESSURE));
         this.pressureView.setText(pressure);
+
+        // TODO figure this out at some point.
+        /*
+        if(AccessibilityManager.getInstance(mContext).isEnabled()) {
+        sendAcc...(AccEvent.TYPE_VIEW_TEXT_CHANGED);
+        @Override
+        public boolean dispatPopAcc...(AccEvent ev) {
+        ev.getText().add(windSpeedDir);
+        return true;
+        }
+         */
 
         // If onCreateOptionsMenu has already happened, we need to update the share intent now.
         if (shareActionProvider != null) {

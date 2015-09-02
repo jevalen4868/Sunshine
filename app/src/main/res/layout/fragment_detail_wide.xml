@@ -101,6 +101,13 @@
                 android:textAppearance="?android:textAppearanceLarge"
                 android:textColor="@color/grey_700" />
 
+            <com.fallenman.jeremyvalenzuela.sunshine.app.WindSpeedArrow
+                android:id="@+id/wind_speed_arrow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="25dp"
+                />
+
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
