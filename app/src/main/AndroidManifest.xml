@@ -48,6 +48,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.fallenman.jeremyvalenzuela.sunshine.app.MainActivity" />
         </activity>
+        <service android:name=".service.SunshineService"></service>
     </application>
 
 </manifest>

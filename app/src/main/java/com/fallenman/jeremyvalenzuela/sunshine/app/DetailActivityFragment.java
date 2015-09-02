@@ -101,8 +101,6 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         this.humidityView = (TextView) rootView.findViewById(R.id.humidity_textview);
         this.windView = (TextView) rootView.findViewById(R.id.wind_textview);
         this.pressureView = (TextView) rootView.findViewById(R.id.pressure_textview);
-        this.mWindSpeedArrow = (WindSpeedArrow) rootView.findViewById(R.id.wind_speed_arrow);
-        this.mWindSpeedArrow.invalidate();
         return rootView;
     }
 

@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.fallenman.jeremyvalenzuela.sunshine.app.data.WeatherContract;
+import com.fallenman.jeremyvalenzuela.sunshine.app.service.SunshineService;
 
 
 /**
@@ -175,10 +176,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     private void updateWeather() {
         // Retrieve weather data! Adapter is set by the onPostExecute method.
-        FetchWeatherTask fwt = new FetchWeatherTask(getActivity());
+        Intent intent = new Intent(getActivity(), SunshineService.class);
         // Retrieve users pref for zip before executing.
         String locationPref = Utility.getPreferredLocation(getActivity());
-        fwt.execute(locationPref);
+        intent.putExtra(Intent.EXTRA_TEXT, locationPref);
+        getActivity().startService(intent);
     }
 
     public void setUseTodayLayout(boolean useTodayLayout) {
