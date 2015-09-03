@@ -1,8 +1,11 @@
 package com.fallenman.jeremyvalenzuela.sunshine.app.service;
 
 import android.app.IntentService;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -27,7 +30,7 @@ import java.util.Vector;
  * Created by jeremyvalenzuela on 9/1/15.
  */
 public class SunshineService extends IntentService{
-
+    public static final String LOCATION_QUERY_EXTRA = "lqe";
     private final String LOG_TAG = SunshineService.class.getSimpleName();
 
     public SunshineService() {
@@ -44,7 +47,7 @@ public class SunshineService extends IntentService{
         if(intent == null) {
             return;
         }
-        String locationQuery = intent.getStringExtra(Intent.EXTRA_TEXT);
+        String locationQuery = intent.getStringExtra(LOCATION_QUERY_EXTRA);
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -319,5 +322,17 @@ public class SunshineService extends IntentService{
         locationCursor.close();
         // Wait, that worked?  Yes!
         return locationId;
+    }
+
+    public static class AlarmReceiver extends BroadcastReceiver {
+        private static final String LOG_TAG = AlarmReceiver.class.getSimpleName();
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.v(LOG_TAG, "onReceive");
+            Intent sendIntent = new Intent(context, SunshineService.class);
+            sendIntent.putExtra(LOCATION_QUERY_EXTRA, sendIntent.getStringExtra(LOCATION_QUERY_EXTRA));
+            context.startService(sendIntent);
+        }
     }
 }

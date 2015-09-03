@@ -49,6 +49,11 @@
                 android:value="com.fallenman.jeremyvalenzuela.sunshine.app.MainActivity" />
         </activity>
         <service android:name=".service.SunshineService"></service>
+        <receiver android:name=".service.SunshineService$AlarmReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
