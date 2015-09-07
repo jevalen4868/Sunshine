@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.text.format.Time;
 import android.util.Log;
 
+import com.fallenman.jeremyvalenzuela.sunshine.app.Utility;
 import com.fallenman.jeremyvalenzuela.sunshine.app.data.WeatherContract;
 
 import org.json.JSONArray;
@@ -58,6 +59,7 @@ public class SunshineService extends IntentService{
 
         String format = "json";
         String units = "metric";
+
         int numDays = 14;
 
         try {
@@ -77,6 +79,7 @@ public class SunshineService extends IntentService{
                     .appendQueryParameter(UNITS_PARAM, units)
                     .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
                     .build();
+            Log.v(LOG_TAG, builtUri.toString());
 
             URL url = new URL(builtUri.toString());
 
@@ -328,10 +331,10 @@ public class SunshineService extends IntentService{
         private static final String LOG_TAG = AlarmReceiver.class.getSimpleName();
 
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(Context context, Intent incomingIntent) {
             Log.v(LOG_TAG, "onReceive");
             Intent sendIntent = new Intent(context, SunshineService.class);
-            sendIntent.putExtra(LOCATION_QUERY_EXTRA, sendIntent.getStringExtra(LOCATION_QUERY_EXTRA));
+            sendIntent.putExtra(LOCATION_QUERY_EXTRA, incomingIntent.getStringExtra(LOCATION_QUERY_EXTRA));
             context.startService(sendIntent);
         }
     }
