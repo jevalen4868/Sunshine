@@ -9,6 +9,8 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
+import com.fallenman.jeremyvalenzuela.sunshine.app.sync.SunshineSyncAdapter;
+
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
  * handset devices, settings are presented as a single list. On tablets,
@@ -66,6 +68,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
             // For other preferences, set the summary to the value's simple string representation.
             preference.setSummary(stringValue);
         }
+        SunshineSyncAdapter.syncImmediately(this);
         return true;
     }
 

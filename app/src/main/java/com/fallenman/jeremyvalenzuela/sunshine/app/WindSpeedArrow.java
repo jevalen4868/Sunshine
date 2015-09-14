@@ -57,7 +57,7 @@ public class WindSpeedArrow extends View {
         int minw = getPaddingLeft() + getPaddingRight() + getSuggestedMinimumWidth();
         int w = resolveSizeAndState(minw, widthMeasureSpec, 1);
 
-        int minh = MeasureSpec.getSize(w)+ getPaddingBottom() + getPaddingTop();
+        int minh = MeasureSpec.getSize(w) + getPaddingBottom() + getPaddingTop();
         int h = resolveSizeAndState(MeasureSpec.getSize(w), heightMeasureSpec, 0);
 
         Log.d(LOG_TAG, "w=" + w + ",h=" + h);

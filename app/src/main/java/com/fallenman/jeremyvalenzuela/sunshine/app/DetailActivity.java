@@ -1,7 +1,6 @@
 package com.fallenman.jeremyvalenzuela.sunshine.app;
 
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
