@@ -182,13 +182,12 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         String weatherDescription = cursor.getString(COL_WEATHER_DESC);
         this.descriptionView.setText(weatherDescription);
         // temps
-        boolean isMetric = Utility.isMetric(activity);
         // Read high temperature from cursor
         double high = cursor.getDouble(COL_WEATHER_MAX_TEMP);
-        this.highTempView.setText(Utility.formatTemperature(activity, high, isMetric));
+        this.highTempView.setText(Utility.formatTemperature(activity, high));
         // Read low temperature from cursor
         double low = cursor.getDouble(COL_WEATHER_MIN_TEMP);
-        this.lowTempView.setText(Utility.formatTemperature(activity, low, isMetric));
+        this.lowTempView.setText(Utility.formatTemperature(activity, low));
         // Wind info.
         float windSpeed = cursor.getFloat(COL_WIND_SPEED);
         float degrees = cursor.getFloat(COL_DEGREES);
