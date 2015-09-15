@@ -17,4 +17,11 @@
         android:key="@string/pref_location_key"
         android:summary="%s"
         android:title="@string/unit_title"></ListPreference>
+    <CheckBoxPreference
+        android:defaultValue="@string/pref_enable_notifications_default"
+        android:title="@string/pref_enable_notifications_label"
+        android:key="@string/pref_enable_notifications_key"
+        android:summaryOff="@string/pref_enable_notifications_false"
+        android:summaryOn="@string/pref_enable_notifications_true">
+    </CheckBoxPreference>
 </PreferenceScreen>
