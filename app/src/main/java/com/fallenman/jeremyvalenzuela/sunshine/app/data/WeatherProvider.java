@@ -27,6 +27,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.util.Log;
 
 public class WeatherProvider extends ContentProvider {
 
@@ -253,7 +254,9 @@ public class WeatherProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         // Student: Start by getting a writable database
-        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        // Both insert and delete functions are trying to open / update / close the db at the same time.
+        WeatherDbHelper wdh = new WeatherDbHelper(getContext());
+        final SQLiteDatabase db = wdh.getWritableDatabase();
         // Student: Use the uriMatcher to match the WEATHER and LOCATION URI's we are going to
         // handle.  If it doesn't match these, throw an UnsupportedOperationException.
         final int match = sUriMatcher.match(uri);
@@ -349,6 +352,7 @@ public class WeatherProvider extends ContentProvider {
                     db.setTransactionSuccessful();
                 } finally {
                     db.endTransaction();
+                    db.close();
                 }
                 getContext().getContentResolver().notifyChange(uri, null);
                 return returnCount;

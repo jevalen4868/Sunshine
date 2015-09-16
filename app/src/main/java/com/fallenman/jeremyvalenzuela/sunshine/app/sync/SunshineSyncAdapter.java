@@ -133,8 +133,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             }
             forecastJsonStr = buffer.toString();
             getWeatherDataFromJson(forecastJsonStr, locationQuery);
-            // Submit notification!
-            notifyWeather();
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attempting
@@ -291,13 +289,23 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
                 inserted = getContext().getContentResolver().bulkInsert(WeatherContract.WeatherEntry.CONTENT_URI, cvArray);
+
+                // delete old data so we don't build up endless history.
+                long deleted = getContext().getContentResolver().delete(
+                        WeatherContract.WeatherEntry.CONTENT_URI,
+                        WeatherContract.WeatherEntry.COLUMN_DATE + " <= ?",
+                        new String[] { Long.toString(dayTime.setJulianDay(julianStartDay - 1))});
+                Log.d(LOG_TAG, "Delete Complete. " + deleted + " Deleted");
+
+                // Submit notification!
+                notifyWeather();
             }
 
             Log.d(LOG_TAG, "FetchWeatherTask Complete. " + inserted + " Inserted");
 
+
         } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage(), e);
-            e.printStackTrace();
         }
     }
     /**

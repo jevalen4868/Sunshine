@@ -84,10 +84,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // Handle action bar clicks. It will auto handle clicks on home/up button,
         // as long as we specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_refresh) {
-            updateWeather();
-            return true;
-        }
+//        if (id == R.id.action_refresh) {
+//            updateWeather();
+//            return true;
+//        }
         if (id == R.id.action_open_map) {
             openPreferredLocationInMap();
             return true;
@@ -153,24 +153,22 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
      * Display map based on geoLocation.
      */
     private void openPreferredLocationInMap() {
-        // Retrieve users preference.
-        String location = Utility.getPreferredLocation(getActivity());
-        // Build query parameter constants
-        final String QUERY_PARAM = "q";
-        Uri geoLoc = Uri.parse("geo:0,0?")
-                .buildUpon()
-                .appendQueryParameter(
-                        QUERY_PARAM,
-                        location)
-                .build();
-        // Build intent.
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW);
-        mapIntent.setData(geoLoc);
-        if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            // Weeeeeeeeeeee!
-            startActivity(mapIntent);
-        } else {
-            Log.d(LOG_TAG, "Couldn't call " + location + ", no apps to recieve.");
+        if ( null != mForecastAdapter ) {
+            Cursor c = mForecastAdapter.getCursor();
+            if( null != c ) {
+                c.moveToPosition(0);
+                String posLat = c.getString(COL_COORD_LAT);
+                String posLong = c.getString(COL_COORD_LONG);
+                Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW);
+                mapIntent.setData(geoLocation);
+                if (mapIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    // Weeeeeeeeeeee!
+                    startActivity(mapIntent);
+                } else {
+                    Log.d(LOG_TAG, "Couldn't call " + geoLocation.toString() + ", no apps to recieve.");
+                }
+            }
         }
     }
 
