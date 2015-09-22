@@ -105,6 +105,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         // Get the forecast list view to set forecast array adapter on.
         this.mListView = (ListView) rootView.findViewById(R.id.listview_forecast);
+        View emptyView = rootView.findViewById(R.id.listview_forecast_empty);
+        this.mListView.setEmptyView(emptyView);
         this.mListView.setAdapter(mForecastAdapter);
         this.mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
