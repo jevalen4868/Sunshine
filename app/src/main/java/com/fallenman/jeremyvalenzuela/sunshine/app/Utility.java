@@ -26,6 +26,8 @@ import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.text.format.Time;
 
+import com.fallenman.jeremyvalenzuela.sunshine.app.sync.SunshineSyncAdapter;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -45,6 +47,13 @@ public class Utility {
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();
         return ni != null && ni.isConnectedOrConnecting();
+    }
+
+    public static @SunshineSyncAdapter.LocationStatus int getLocationStatus(Context c) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
+        String locationStatusKey = c.getString(R.string.pref_location_status_key);
+        int locationStatus = prefs.getInt(locationStatusKey, 0);
+        return locationStatus;
     }
 
     public static String getFormattedWind(Context context, float windSpeed, float degrees) {

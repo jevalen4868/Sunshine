@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.fallenman.jeremyvalenzuela.sunshine.app.data.WeatherContract;
 import com.fallenman.jeremyvalenzuela.sunshine.app.sync.SunshineSyncAdapter;
 
-
 /**
  * A placeholder fragment containing a simple view.
  */
