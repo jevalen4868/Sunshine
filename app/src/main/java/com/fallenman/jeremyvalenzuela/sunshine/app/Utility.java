@@ -21,6 +21,8 @@ package com.fallenman.jeremyvalenzuela.sunshine.app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
 import android.text.format.Time;
 
@@ -29,9 +31,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Utility {
+
     // Format used for storing dates in the database.  ALso used for converting those strings
     // back into date objects for comparison/processing.
     public static final String DATE_FORMAT = "yyyyMMdd";
+
+    /**
+     * Returns true if the net is avail or about to be avail.
+     * @param context
+     * @return
+     */
+    public static final boolean isNetworkAvailable(Context context) {
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        return ni != null && ni.isConnectedOrConnecting();
+    }
 
     public static String getFormattedWind(Context context, float windSpeed, float degrees) {
         int windFormat;

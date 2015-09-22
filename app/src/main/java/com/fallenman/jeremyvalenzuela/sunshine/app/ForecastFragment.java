@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.fallenman.jeremyvalenzuela.sunshine.app.data.WeatherContract;
 import com.fallenman.jeremyvalenzuela.sunshine.app.sync.SunshineSyncAdapter;
@@ -104,11 +105,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         mForecastAdapter.setUseTodayLayout(mUseTodayLayout);
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         // Get the forecast list view to set forecast array adapter on.
-        this.mListView = (ListView) rootView.findViewById(R.id.listview_forecast);
+        mListView = (ListView) rootView.findViewById(R.id.listview_forecast);
         View emptyView = rootView.findViewById(R.id.listview_forecast_empty);
-        this.mListView.setEmptyView(emptyView);
-        this.mListView.setAdapter(mForecastAdapter);
-        this.mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setEmptyView(emptyView);
+        mListView.setAdapter(mForecastAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView adapterView, View view, int position, long l) {
@@ -129,6 +130,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
+
         return rootView;
     }
 
@@ -213,11 +215,25 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         if (mPosition != ListView.INVALID_POSITION) {
             mListView.smoothScrollToPosition(mPosition);
         }
+        updateEmptyView();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mForecastAdapter.swapCursor(null);
+    }
+
+    public void updateEmptyView() {
+        if( mForecastAdapter.getCount() == 0 ) {
+            TextView tv = (TextView) getView().findViewById(R.id.listview_forecast_empty);
+            if( null != tv) {
+                int message = R.string.empty_forecast_list;
+                if(!Utility.isNetworkAvailable(getActivity())) {
+                    message = R.string.empty_forecast_list_no_network;
+                }
+                tv.setText(message);
+            }
+        }
     }
 
     /**
