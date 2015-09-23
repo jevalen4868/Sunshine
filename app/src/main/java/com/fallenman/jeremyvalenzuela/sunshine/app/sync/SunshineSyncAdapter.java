@@ -48,12 +48,14 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     public final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
 
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({LOCATION_STATUS_OK, LOCATION_STATUS_SERVER_DOWN, LOCATION_STATUS_SERVER_INVALID, LOCATION_STATUS_UNKNOWN})
+    @IntDef({LOCATION_STATUS_OK, LOCATION_STATUS_SERVER_DOWN, LOCATION_STATUS_SERVER_INVALID, LOCATION_STATUS_UNKNOWN, LOCATION_STATUS_INVALID})
     public @interface LocationStatus {}
     public static final int LOCATION_STATUS_OK = 0;
     public static final int LOCATION_STATUS_SERVER_DOWN = 1;
     public static final int LOCATION_STATUS_SERVER_INVALID = 2;
     public static final int LOCATION_STATUS_UNKNOWN = 3;
+    public static final int LOCATION_STATUS_INVALID = 4;
+
 
     // Interval at which to sync with the weather, in milliseconds.
     // 60 seconds (1 minute) * 180 = 3 hours
@@ -152,7 +154,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             }
             forecastJsonStr = buffer.toString();
             getWeatherDataFromJson(forecastJsonStr, locationQuery);
-            setLocationStatus(getContext(), LOCATION_STATUS_OK);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
             // If the code didn't successfully get the weather data, there's no point in attempting
@@ -217,7 +218,25 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         final String OWM_DESCRIPTION = "main";
         final String OWM_WEATHER_ID = "id";
 
+        final String OWM_MESSAGE_CODE = "cod";
+
         JSONObject forecastJson = new JSONObject(forecastJsonStr);
+
+        // First check if we got a valid response, we can return error here otherwise.
+        if(forecastJson.has(OWM_MESSAGE_CODE)) {
+            // test for location errors.
+            int errorCode = forecastJson.getInt(OWM_MESSAGE_CODE);
+            switch (errorCode) {
+                case HttpURLConnection.HTTP_OK:
+                    break;
+                case HttpURLConnection.HTTP_NOT_FOUND:
+                    setLocationStatus(getContext(), LOCATION_STATUS_INVALID);
+                    return;
+                default:
+                    setLocationStatus(getContext(), LOCATION_STATUS_SERVER_DOWN);
+                    return;
+            }
+        }
         JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
 
         JSONObject cityJson = forecastJson.getJSONObject(OWM_CITY);
@@ -320,6 +339,9 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             // Submit notification!
             notifyWeather();
         }
+
+        // Let the app know everything went ok!
+        setLocationStatus(getContext(), LOCATION_STATUS_OK);
 
         Log.d(LOG_TAG, "FetchWeatherTask Complete. " + inserted + " Inserted");
     }

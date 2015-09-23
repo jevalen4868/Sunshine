@@ -49,11 +49,24 @@ public class Utility {
         return ni != null && ni.isConnectedOrConnecting();
     }
 
+    @SuppressWarnings("ResourceType")
     public static @SunshineSyncAdapter.LocationStatus int getLocationStatus(Context c) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
         String locationStatusKey = c.getString(R.string.pref_location_status_key);
-        int locationStatus = prefs.getInt(locationStatusKey, 0);
+        int locationStatus = prefs.getInt(locationStatusKey, SunshineSyncAdapter.LOCATION_STATUS_UNKNOWN);
         return locationStatus;
+    }
+
+    /**
+     * resets location status to SunshineSyncAdapter.LOCATION_STATUS_UNKNOWN
+     * @param c to get the shared preferences.
+     */
+    public static void resetLocationStatus ( Context c ) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor se = prefs.edit();
+        String locationStatusKey = c.getString(R.string.pref_location_status_key);
+        se.putInt(locationStatusKey, SunshineSyncAdapter.LOCATION_STATUS_UNKNOWN);
+        se.apply();
     }
 
     public static String getFormattedWind(Context context, float windSpeed, float degrees) {
@@ -91,13 +104,13 @@ public class Utility {
 
     public static String getPreferredLocation(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getString(context.getString(R.string.location_key),
+        return prefs.getString(context.getString(R.string.pref_location_key),
                 context.getString(R.string.pref_location_default));
     }
 
     public static boolean isMetric(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getString(context.getString(R.string.pref_location_key),
+        return prefs.getString(context.getString(R.string.pref_units_key),
                 context.getString(R.string.pref_units_metric))
                 .equals(context.getString(R.string.pref_units_metric));
     }
