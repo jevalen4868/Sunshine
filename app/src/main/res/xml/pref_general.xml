@@ -1,6 +1,6 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom="http://schemas.android.com/apk/com.fallenman.jeremyvalenzuela.sunshine.app">
+    xmlns:custom="http://schemas.android.com/apk/res/com.fallenman.jeremyvalenzuela.sunshine.app">
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
     <com.fallenman.jeremyvalenzuela.sunshine.app.LocationEditTextPreference
@@ -15,8 +15,8 @@
         custom:minLength="3" />
     <ListPreference
         android:defaultValue="@string/default_unit"
-        android:entries="@array/unit_keys"
-        android:entryValues="@array/unit_values"
+        android:entries="@array/pref_units_options"
+        android:entryValues="@array/pref_units_values"
         android:key="@string/pref_units_key"
         android:summary="%s"
         android:title="@string/unit_title"></ListPreference>
@@ -27,4 +27,12 @@
         android:summaryOff="@string/pref_enable_notifications_false"
         android:summaryOn="@string/pref_enable_notifications_true">
     </CheckBoxPreference>
+    <ListPreference
+        android:defaultValue="@string/pref_art_pack_label_sunshine"
+        android:entries="@array/pref_art_pack_options"
+        android:entryValues="@array/pref_art_pack_values"
+        android:key="@string/pref_art_pack_key"
+        android:summary="%s"
+        android:title="@string/pref_art_pack_label"
+        />
 </PreferenceScreen>

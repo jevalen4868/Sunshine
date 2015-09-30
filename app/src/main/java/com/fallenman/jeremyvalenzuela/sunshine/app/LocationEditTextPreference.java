@@ -9,15 +9,17 @@ import android.preference.EditTextPreference;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
 /**
  * Created by jeremyvalenzuela on 9/22/15.
  */
-public class LocationEditTextPreference extends EditTextPreference{
+public class LocationEditTextPreference extends EditTextPreference {
     private static final int DEFAULT_MINIMUM_LOCATION_LENGTH = 2;
     private int mMinLength;
+    private static final String LOG_TAG = LocationEditTextPreference.class.getSimpleName();
     public LocationEditTextPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray a = context.getTheme().obtainStyledAttributes(
@@ -26,10 +28,12 @@ public class LocationEditTextPreference extends EditTextPreference{
                 0, 0);
         try {
             mMinLength = a.getInteger(R.styleable.LocationEditTextPreference_minLength, DEFAULT_MINIMUM_LOCATION_LENGTH);
+            Log.v(LOG_TAG, "mMinLength=" + mMinLength);
         }
         finally {
             a.recycle();
         }
+        Log.v(LOG_TAG, "mMinLength=" + mMinLength);
     }
 
     @Override

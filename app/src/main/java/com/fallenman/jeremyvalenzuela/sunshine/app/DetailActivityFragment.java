@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.util.Util;
 import com.fallenman.jeremyvalenzuela.sunshine.app.data.WeatherContract;
 
 /**
@@ -64,16 +66,15 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     private ShareActionProvider shareActionProvider;
 
     // all views associated to this fragment.
-    private ImageView iconView;
-    private TextView friendlyDateView;
-    private TextView dateView;
-    private TextView descriptionView;
-    private TextView highTempView;
-    private TextView lowTempView;
-    private TextView humidityView;
-    private TextView windView;
-    private TextView pressureView;
-    private WindSpeedArrow mWindSpeedArrow;
+    private ImageView mIconView;
+    private TextView mFriendlyDateView;
+    private TextView mDateView;
+    private TextView mDescriptionView;
+    private TextView mHighTempView;
+    private TextView mLowTempView;
+    private TextView mHumidityView;
+    private TextView mWindView;
+    private TextView mPressureView;
 
     public DetailActivityFragment() {
         // MUST DO THIS IF DONE IN FRAGMENT.
@@ -90,15 +91,15 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         // Voila!!!
-        this.iconView = (ImageView) rootView.findViewById(R.id.weather_icon);
-        this.friendlyDateView = (TextView) rootView.findViewById(R.id.friendly_date_textview);
-        this.dateView = (TextView) rootView.findViewById(R.id.date_textview);
-        this.descriptionView = (TextView) rootView.findViewById(R.id.forecast_textview);
-        this.highTempView = (TextView) rootView.findViewById(R.id.high_textview);
-        this.lowTempView = (TextView) rootView.findViewById(R.id.low_textview);
-        this.humidityView = (TextView) rootView.findViewById(R.id.humidity_textview);
-        this.windView = (TextView) rootView.findViewById(R.id.wind_textview);
-        this.pressureView = (TextView) rootView.findViewById(R.id.pressure_textview);
+        this.mIconView = (ImageView) rootView.findViewById(R.id.weather_icon);
+        this.mFriendlyDateView = (TextView) rootView.findViewById(R.id.friendly_date_textview);
+        this.mDateView = (TextView) rootView.findViewById(R.id.date_textview);
+        this.mDescriptionView = (TextView) rootView.findViewById(R.id.forecast_textview);
+        this.mHighTempView = (TextView) rootView.findViewById(R.id.high_textview);
+        this.mLowTempView = (TextView) rootView.findViewById(R.id.low_textview);
+        this.mHumidityView = (TextView) rootView.findViewById(R.id.humidity_textview);
+        this.mWindView = (TextView) rootView.findViewById(R.id.wind_textview);
+        this.mPressureView = (TextView) rootView.findViewById(R.id.pressure_textview);
         return rootView;
     }
 
@@ -171,34 +172,58 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         // image - use condition id and layout id
         // Retrieve weather icons based on layoutId and conditionId.
         int conditionId = cursor.getInt(COL_WEATHER_CONDITION_ID);
-        this.iconView.setImageResource(Utility.getArtResourceForWeatherCondition(conditionId));
-        // date
+        // Use weather art image
+        Glide.with(this)
+                .load(Utility.getArtUrlForWeatherCondition(getActivity(), conditionId))
+                .error(Utility.getArtResourceForWeatherCondition(conditionId))
+                .crossFade()
+                .into(mIconView);
+                // date
         long date = cursor.getLong(COL_WEATHER_DATE);
         String friendlyDateText = Utility.getDayName(activity, date);
-        this.friendlyDateView.setText(friendlyDateText);
+        this.mFriendlyDateView.setText(friendlyDateText);
         String dateText = Utility.getFormattedMonthDay(activity, date);
-        this.dateView.setText(dateText);
+        this.mDateView.setText(dateText);
         // description.
         String weatherDescription = cursor.getString(COL_WEATHER_DESC);
-        this.descriptionView.setText(weatherDescription);
+        this.mDescriptionView.setText(weatherDescription);
+        mDescriptionView.setContentDescription(getString(R.string.a11y_forecast, weatherDescription));
+
+        // For accessibility, add a content description to the icon field. Because the ImageView
+        // is independently focusable, it's better to have a description of the image. Using
+        // null is appropriate when the image is purely decorative or when the image already
+        // has text describing it in the same UI component.
+        mIconView.setContentDescription(getString(R.string.a11y_forecast_icon, weatherDescription));
+
         // temps
         // Read high temperature from cursor
         double high = cursor.getDouble(COL_WEATHER_MAX_TEMP);
-        this.highTempView.setText(Utility.formatTemperature(activity, high));
+        String highString = Utility.formatTemperature(activity, high);
+        this.mHighTempView.setText(highString);
+        mHighTempView.setContentDescription(getString(R.string.a11y_high_temp, highString));
+
         // Read low temperature from cursor
         double low = cursor.getDouble(COL_WEATHER_MIN_TEMP);
-        this.lowTempView.setText(Utility.formatTemperature(activity, low));
+        String lowString = Utility.formatTemperature(activity, low);
+        this.mLowTempView.setText(lowString);
+        mLowTempView.setContentDescription(getString(R.string.a11y_low_temp, lowString));
+
         // Wind info.
         float windSpeed = cursor.getFloat(COL_WIND_SPEED);
         float degrees = cursor.getFloat(COL_DEGREES);
         String wind = Utility.getFormattedWind(activity, windSpeed, degrees);
-        this.windView.setText(wind);
+        this.mWindView.setText(wind);
+        mWindView.setContentDescription(mWindView.getText());
+
         // Humidity.
         String humidity = activity.getString(R.string.format_humidity, cursor.getFloat(COL_HUMIDITY));
-        this.humidityView.setText(humidity);
+        this.mHumidityView.setText(humidity);
+        mHumidityView.setContentDescription(mHumidityView.getText());
+
         // Pressure.
         String pressure = activity.getString(R.string.format_pressure, cursor.getFloat(COL_PRESSURE));
-        this.pressureView.setText(pressure);
+        this.mPressureView.setText(pressure);
+        mPressureView.setContentDescription(mPressureView.getText());
 
         // TODO figure this out at some point.
         /*
