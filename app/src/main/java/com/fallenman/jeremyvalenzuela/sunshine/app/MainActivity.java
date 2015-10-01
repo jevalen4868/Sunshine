@@ -28,7 +28,7 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     //GCM ATTRIBUTES.
-    private final static String PROJECT_NUMBER="236177093208";
+    public final static String PROJECT_NUMBER="236177093208";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
@@ -75,6 +75,7 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
         if (checkPlayServices()) {
             mGcm = GoogleCloudMessaging.getInstance(this);
             String regId = getRegistrationId(this);
+            Log.i(LOG_TAG, regId);
             if (regId.isEmpty()) {
                 registerInBackground(this);
             }
