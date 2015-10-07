@@ -29,7 +29,6 @@ import com.fallenman.jeremyvalenzuela.sunshine.app.data.WeatherContract;
  * A placeholder fragment containing a simple view.
  */
 public class DetailActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    public static final String DETAIL_URI = "URI";
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
     // must change.
     static final int COL_WEATHER_ID = 0;
@@ -62,8 +61,11 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
             WeatherContract.WeatherEntry.COLUMN_DEGREES
     };
     private final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
+    public static final String DETAIL_TRANSITION_ANIMATION = "DTA";
+    public static final String DETAIL_URI = "URI";
     private String mForecast;
     private Uri mUri;
+    private boolean mTransitionAnimation;
     private ShareActionProvider mShareActionProvider;
 
     // all views associated to this fragment.
@@ -90,6 +92,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
         Bundle args = getArguments();
         if (args != null) {
             this.mUri = args.getParcelable(DetailActivityFragment.DETAIL_URI);
+            mTransitionAnimation = args.getBoolean(DetailActivityFragment.DETAIL_TRANSITION_ANIMATION, false);
         }
 
         View rootView = inflater.inflate(R.layout.fragment_detail_start, container, false);
@@ -124,7 +127,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (getActivity() instanceof DetailActivity) {
+        if ( mTransitionAnimation ) {
             // Inflate the menu; this adds items to the action bar if it is present.
             inflater.inflate(R.menu.detail_fragment, menu);
             finishCreatingMenu(menu);

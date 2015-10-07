@@ -18,6 +18,7 @@ public class DetailActivity extends AppCompatActivity {
             // Create the detail fragment using a transaction.
             Bundle args = new Bundle();
             args.putParcelable(DetailActivityFragment.DETAIL_URI, getIntent().getData());
+            args.putBoolean(DetailActivityFragment.DETAIL_TRANSITION_ANIMATION, true);
 
             DetailActivityFragment daf = new DetailActivityFragment();
             daf.setArguments(args);
