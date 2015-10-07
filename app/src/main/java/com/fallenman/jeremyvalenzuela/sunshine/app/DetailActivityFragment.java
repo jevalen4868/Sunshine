@@ -1,6 +1,5 @@
 package com.fallenman.jeremyvalenzuela.sunshine.app;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -9,8 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -19,11 +18,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.util.Util;
 import com.fallenman.jeremyvalenzuela.sunshine.app.data.WeatherContract;
 
 /**
@@ -64,7 +63,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     };
     private final String LOG_TAG = DetailActivityFragment.class.getSimpleName();
     private String mForecast;
-    private Uri uri;
+    private Uri mUri;
     private ShareActionProvider mShareActionProvider;
 
     // all views associated to this fragment.
@@ -90,7 +89,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
                              Bundle savedInstanceState) {
         Bundle args = getArguments();
         if (args != null) {
-            this.uri = args.getParcelable(DetailActivityFragment.DETAIL_URI);
+            this.mUri = args.getParcelable(DetailActivityFragment.DETAIL_URI);
         }
 
         View rootView = inflater.inflate(R.layout.fragment_detail_start, container, false);
@@ -139,27 +138,31 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     }
 
     public void onLocationChanged(String location) {
-        // replace the uri, since the location has changed
-        Uri uri = this.uri;
+        // replace the mUri, since the location has changed
+        Uri uri = this.mUri;
         if (null != uri) {
             long date = WeatherContract.WeatherEntry.getDateFromUri(uri);
             Uri updatedUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(location, date);
-            this.uri = updatedUri;
+            this.mUri = updatedUri;
             getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
         }
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (null != this.uri) {
+        if (null != this.mUri) {
             return new CursorLoader(
                     getActivity(),
-                    this.uri,
+                    this.mUri,
                     FORECAST_COLUMNS,
                     null,
                     null,
                     null
             );
+        }
+        ViewParent vp = getView().getParent();
+        if ( vp instanceof CardView) {
+            ((View)vp).setVisibility(View.INVISIBLE);
         }
         return null;
     }
@@ -167,6 +170,10 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data != null && data.moveToFirst()) {
+            ViewParent vp = getView().getParent();
+            if ( vp instanceof CardView ) {
+                ((View) vp).setVisibility(View.VISIBLE);
+            }
             // Read weather condition ID from cursor
             int weatherId = data.getInt(COL_WEATHER_CONDITION_ID);
 
