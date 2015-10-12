@@ -52,6 +52,7 @@ import java.util.concurrent.ExecutionException;
 
 public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     public final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
+    public static final String ACTION_DATA_UPDATED = "com.fallenman.jeremyvalenzuela.sunshine.app.ACTION_DATA_UPDATED";
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({LOCATION_STATUS_OK, LOCATION_STATUS_SERVER_DOWN, LOCATION_STATUS_SERVER_INVALID, LOCATION_STATUS_UNKNOWN, LOCATION_STATUS_INVALID})
@@ -342,6 +343,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                     new String[]{Long.toString(dayTime.setJulianDay(julianStartDay - 1))});
             Log.d(LOG_TAG, "Delete Complete. " + deleted + " Deleted");
 
+            // Notify our widget!
+            updateWidgets();
             // Submit notification!
             notifyWeather();
         }
@@ -491,6 +494,14 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
     public static void initializeSyncAdapter(Context context) {
         getSyncAccount(context);
+    }
+
+    private void updateWidgets() {
+        Context context = getContext();
+        // Setting the package ensures that only components in our app will receive the broadcast
+        Intent dataUpdatedIntent = new Intent(ACTION_DATA_UPDATED)
+                .setPackage(context.getPackageName());
+        context.sendBroadcast(dataUpdatedIntent);
     }
 
     private void notifyWeather() {

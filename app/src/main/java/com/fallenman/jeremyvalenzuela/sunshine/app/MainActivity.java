@@ -1,6 +1,5 @@
 package com.fallenman.jeremyvalenzuela.sunshine.app;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.fallenman.jeremyvalenzuela.sunshine.app.data.WeatherContract;
 import com.fallenman.jeremyvalenzuela.sunshine.app.sync.SunshineSyncAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -39,9 +39,9 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
     private static final String PROPERTY_APP_VERSION = "appVersion";
 
     /**
-     * Current known location.
+     * Current known mLocation.
      */
-    private String location;
+    private String mLocation;
     private boolean twoPane = false;
     private GoogleCloudMessaging mGcm;
 
@@ -53,9 +53,9 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
-        // Set location.
-        location = Utility.getPreferredLocation(this);
+        // Set mLocation.
+        mLocation = Utility.getPreferredLocation(this);
+        Uri contentUri = getIntent() != null ? getIntent().getData() : null;
         // determine if we are in two page view.
         if (findViewById(R.id.weather_detail_container) != null) {
             // The detail container view will be present only in the large-screen layouts
@@ -66,8 +66,14 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             // adding or replacing the detail fragment using a
             // fragment transaction.
             if (savedInstanceState == null) {
+                DetailActivityFragment fragment = new DetailActivityFragment();
+                if(contentUri != null) {
+                    Bundle args = new Bundle();
+                    args.putParcelable(DetailActivityFragment.DETAIL_URI, contentUri);
+                    fragment.setArguments(args);
+                }
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.weather_detail_container, new DetailActivityFragment(), DETAIL_FRAGMENT_TAG)
+                        .replace(R.id.weather_detail_container, fragment, DETAIL_FRAGMENT_TAG)
                         .commit();
             }
         } else {
@@ -76,6 +82,10 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         }
         ForecastFragment ff = ((ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast));
         ff.setUseTodayLayout(!twoPane);
+
+        if(contentUri != null) {
+            ff.setInitialSelectedDate(WeatherContract.WeatherEntry.getDateFromUri(contentUri));
+        }
         // Now initialize our sync adapter.
         SunshineSyncAdapter.initializeSyncAdapter(this);
 
@@ -124,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
     protected void onResume() {
         super.onResume();
         String location = Utility.getPreferredLocation(this);
-        if (location != null) { //&& !location.equals(this.location)) {
+        if (location != null) { //&& !mLocation.equals(this.mLocation)) {
             ForecastFragment ff = (ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
             if (null != ff) {
                 ff.onLocationChanged();
@@ -133,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             if (null != df) {
                 df.onLocationChanged(location);
             }
-            this.location = location;
+            this.mLocation = location;
         }
     }
 
